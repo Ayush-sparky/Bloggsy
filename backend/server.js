@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const PORT = 3030;
 require("dotenv").config();
+const path = require("path");
 
 // Middlewares
 const errorHandler = require("./middlewares/errorHandler");
@@ -16,6 +17,9 @@ const DBconnection = require("./DBconfig");
 
 // DB connection
 DBconnection(process.env.MONGO_URI);
+
+// Serve 'uploads' folder as static
+app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
 
 // Express body JSON parser middleware
 app.use(express.json());
