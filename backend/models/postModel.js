@@ -1,6 +1,6 @@
 const mongoose = require("mongoose");
 
-// Defining (Creating) user schema (layout or structure for user model)
+// Defining (Creating) post schema (layout or structure for post model)
 const postSchema = new mongoose.Schema({
   title: {
     type: String,
@@ -20,6 +20,6 @@ const postSchema = new mongoose.Schema({
   },
 });
 
-// Creating a model based on the userSchema
+// Creating a model based on the postSchema
 const postModel = mongoose.model("posts", postSchema);
 module.exports = postModel;
