@@ -49,7 +49,45 @@ const getAllPosts = async (req, res, next) => {
     next(err);
   }
 };
-const updatePost = async (req, res, next) => {};
+const updatePost = async (req, res, next) => {
+  const { id } = req.params;
+  const { title, content } = req.body;
+
+  if (!id) {
+    const error = new Error("Couldn't find the post");
+    error.statusCode = 400;
+    return next(err);
+  }
+
+  try {
+    const post = await postModel.findById(id);
+
+    if (!post) {
+      const error = new Error("Couldn't find the post");
+      error.statusCode = 400;
+      return next(err);
+    }
+
+    if (post.author.toString() !== req.user.id) {
+      const error = new Error("Not authorized to edit the post");
+      error.statusCode = 403;
+      return next(err);
+    }
+
+    if (title) post.title = title;
+    if (content) post.content = content;
+    if (req.file) post.coverImage = req.file.filename;
+
+    const updatedPost = await post.save();
+
+    res.status(200).json({
+      message: "Post update successfully",
+      updatedPost,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 const deletePost = async (req, res, next) => {};
 
 module.exports = {
