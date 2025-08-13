@@ -1,19 +1,29 @@
-const express = require('express')
-const errorHandler = require('./middlewares/errorHandler')
-const app = express()
-const PORT = 3030
-require('dotenv').config()
+const express = require("express");
+const app = express();
+const PORT = 3030;
+require("dotenv").config();
+
+// Middlewares
+const errorHandler = require("./middlewares/errorHandler");
 
 // Routes
-const userRoutes = require('./routes/userRoutes')
+const userRoutes = require("./routes/userRoutes");
+
+// DB
+const DBconnection = require("./DBconfig");
+
+// ------------------------------------------------------------------------------------------- //
+
+// DB connection
+DBconnection(process.env.MONGO_URI);
 
 // Express body JSON parser middleware
-app.use(express.json())
+app.use(express.json());
 
 // User Routes
-app.use('/api/users',userRoutes)
+app.use("/api/users", userRoutes);
 
 // Global Error Hanlding Middleware (always after routes or at the end to catch almost all errors)
-app.use(errorHandler)
+app.use(errorHandler);
 
-app.listen(PORT, () => console.log('Server Running on PORT: ',PORT))
+app.listen(PORT, () => console.log("Server Running on PORT: ", PORT));
