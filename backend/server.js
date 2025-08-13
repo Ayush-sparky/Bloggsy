@@ -4,6 +4,15 @@ const app = express()
 const PORT = 3030
 require('dotenv').config()
 
+// Routes
+const userRoutes = require('./routes/userRoutes')
+
+// Express body JSON parser middleware
+app.use(express.json())
+
+// User Routes
+app.use('/api/users',userRoutes)
+
 // Global Error Hanlding Middleware (always after routes or at the end to catch almost all errors)
 app.use(errorHandler)
 
