@@ -9,7 +9,7 @@ const errorHandler = require("./middlewares/errorHandler");
 
 // Routes
 const userRoutes = require("./routes/userRoutes");
-const postRoutes = require('./routes/postRoutes')
+const postRoutes = require("./routes/postRoutes");
 
 // DB
 const DBconnection = require("./DBconfig");
@@ -29,7 +29,7 @@ app.use(express.json());
 app.use("/api/users", userRoutes);
 
 // Post Routes
-app.use('/api/posts', postRoutes)
+app.use("/api/posts", postRoutes);
 
 // Global Error Hanlding Middleware (always after routes or at the end to catch almost all errors)
 app.use(errorHandler);
