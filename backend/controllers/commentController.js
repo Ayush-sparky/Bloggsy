@@ -32,6 +32,44 @@ const postComment = async (req, res, next) => {
   }
 };
 
+const getSinglePostComments = async (req, res, next) => {
+  const { postId } = req.params;
+
+  if (!postId) {
+    const error = new Error("Failed to load comment for this post");
+    error.statusCode = 404;
+    return next(error);
+  }
+
+  try {
+    const topLevelComments = await commentModel
+      .find({ post: postId, parentComment: null })
+      .populate("author", "username")
+      .sort({ createdAt: -1 });
+
+    const commentsWithReplies = await Promise.all(
+      topLevelComments.map(async (comment) => {
+        const replies = await commentModel
+          .find({ parentComment: comment._id })
+          .populate("author", "username")
+          .sort({ createdAt: 1 });
+
+        return {
+          ...comment.toObject(),
+          replies,
+        };
+      })
+    );
+
+    res.status(200).json({
+      commentsWithReplies,
+    });
+  } catch (err) {
+    next(err)
+  }
+};
+
 module.exports = {
   postComment,
+  getSinglePostComments,
 };
