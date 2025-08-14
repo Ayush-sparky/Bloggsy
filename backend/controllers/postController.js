@@ -6,7 +6,7 @@ const createPost = async (req, res, next) => {
   if (!title || !content) {
     const error = new Error("All fields are required");
     error.statusCode = 400;
-    return next(err);
+    return next(error);
   }
 
   try {
@@ -20,7 +20,7 @@ const createPost = async (req, res, next) => {
     res.status(201).json({
       message: "New Post created successfully",
       newPost,
-    });``
+    });
   } catch (err) {
     next(err);
   }
@@ -35,6 +35,7 @@ const getAllPosts = async (req, res, next) => {
     const totalPosts = await postModel.countDocuments();
     const allPosts = await postModel
       .find()
+      .populate("author", "username -_id")
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -57,7 +58,7 @@ const updatePost = async (req, res, next) => {
   if (!id) {
     const error = new Error("Couldn't find the post");
     error.statusCode = 400;
-    return next(err);
+    return next(error);
   }
 
   try {
@@ -66,13 +67,13 @@ const updatePost = async (req, res, next) => {
     if (!post) {
       const error = new Error("Couldn't find the post");
       error.statusCode = 400;
-      return next(err);
+      return next(error);
     }
 
     if (post.author.toString() !== req.user.id) {
       const error = new Error("Not authorized to edit the post");
       error.statusCode = 403;
-      return next(err);
+      return next(error);
     }
 
     if (title) post.title = title;
@@ -96,7 +97,7 @@ const deletePost = async (req, res, next) => {
   if (!id) {
     const error = new Error("Couldn't find the post");
     error.statusCode = 400;
-    return next(err);
+    return next(error);
   }
 
   try {
@@ -105,13 +106,13 @@ const deletePost = async (req, res, next) => {
     if (!post) {
       const error = new Error("Post not found");
       error.statusCode = 404;
-      return next(err);
+      return next(error);
     }
 
     if (post.author.toString() !== req.user.id) {
       const error = new Error("Not authorized to delete the post");
       error.statusCode = 403;
-      return next(err);
+      return next(error);
     }
 
     await postModel.findByIdAndDelete(id);
