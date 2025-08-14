@@ -56,6 +56,7 @@ const getSinglePostComments = async (req, res, next) => {
 
         return {
           ...comment.toObject(),
+          repliesCount: replies.length,
           replies,
         };
       })
@@ -65,7 +66,7 @@ const getSinglePostComments = async (req, res, next) => {
       commentsWithReplies,
     });
   } catch (err) {
-    next(err)
+    next(err);
   }
 };
 
