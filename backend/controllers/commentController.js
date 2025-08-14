@@ -20,7 +20,7 @@ const postComment = async (req, res, next) => {
       content,
       post: postId,
       author: req.user.id,
-      parentCommentId: parentCommentId || null,
+      parentComment: parentCommentId || null,
     });
 
     res.status(201).json({
