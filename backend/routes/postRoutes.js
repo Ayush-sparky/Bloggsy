@@ -3,6 +3,7 @@ const {
   createPost,
   getAllPosts,
   updatePost,
+  deletePost,
 } = require("../controllers/postController");
 const router = express.Router();
 const upload = require("../multerConfig");
@@ -16,5 +17,8 @@ router.get("/", getAllPosts);
 
 // Edit post (only author have the authority)
 router.put("/update/:id", authMiddleware, upload.single("cover"), updatePost);
+
+// Delete post (authorized only)
+router.delete("/delete/:id", authMiddleware, deletePost);
 
 module.exports = router;

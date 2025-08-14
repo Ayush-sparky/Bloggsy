@@ -20,7 +20,7 @@ const createPost = async (req, res, next) => {
     res.status(201).json({
       message: "New Post created successfully",
       newPost,
-    });
+    });``
   } catch (err) {
     next(err);
   }
@@ -49,6 +49,7 @@ const getAllPosts = async (req, res, next) => {
     next(err);
   }
 };
+
 const updatePost = async (req, res, next) => {
   const { id } = req.params;
   const { title, content } = req.body;
@@ -88,7 +89,40 @@ const updatePost = async (req, res, next) => {
     next(err);
   }
 };
-const deletePost = async (req, res, next) => {};
+
+const deletePost = async (req, res, next) => {
+  const { id } = req.params;
+
+  if (!id) {
+    const error = new Error("Couldn't find the post");
+    error.statusCode = 400;
+    return next(err);
+  }
+
+  try {
+    const post = await postModel.findById(id);
+
+    if (!post) {
+      const error = new Error("Post not found");
+      error.statusCode = 404;
+      return next(err);
+    }
+
+    if (post.author.toString() !== req.user.id) {
+      const error = new Error("Not authorized to delete the post");
+      error.statusCode = 403;
+      return next(err);
+    }
+
+    await postModel.findByIdAndDelete(id);
+
+    res.status(200).json({
+      message: "Post deleted successfully",
+    });
+  } catch (err) {
+    next(err);
+  }
+};
 
 module.exports = {
   createPost,
