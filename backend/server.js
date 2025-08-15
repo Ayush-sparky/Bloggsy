@@ -4,6 +4,9 @@ const PORT = 3030;
 require("dotenv").config();
 const path = require("path");
 
+// CORS
+const cors = require("cors");
+
 // Middlewares
 const errorHandler = require("./middlewares/errorHandler");
 
@@ -22,6 +25,9 @@ DBconnection(process.env.MONGO_URI);
 
 // Serve 'uploads' folder as static
 app.use("/uploads", express.static(path.join(process.cwd(), "uploads")));
+
+// CORS
+app.use(cors());
 
 // Express body JSON parser middleware
 app.use(express.json());
