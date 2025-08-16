@@ -25,9 +25,12 @@ function App() {
           return (
             <div className="max-w-sm mx-auto mb-20 bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
               {/* Cover Image */}
-              {post.coverImage ? (
+              {post.coverImage && post.coverImage.startsWith("/uploads") ? (
                 <div>
-                  <img src={`http://localhost:3030${post.coverImage}`} alt="CoverImage" />
+                  <img
+                    src={`http://localhost:3030${post.coverImage}`}
+                    alt="CoverImage"
+                  />
                 </div>
               ) : (
                 <div className="h-48 bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center">
