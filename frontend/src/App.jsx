@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import RegisterForm from "./components/auth/RegisterPage";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 function App() {
   // const [posts, setPosts] = useState([]);
@@ -80,7 +81,14 @@ function App() {
   //   </div>
   // );
 
-  return <RegisterForm />
+  return (
+    <Router>
+      <Routes>
+        <Route path="/" element={<h1>Hey this is the home page</h1>} />
+        <Route path="/register" element={<RegisterForm />} />
+      </Routes>
+    </Router>
+  );
 }
 
 export default App;
