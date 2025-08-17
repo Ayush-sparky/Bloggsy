@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import RegisterForm from "./components/auth/RegisterPage";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import LoginForm from "./components/auth/LoginPage";
 
 function App() {
   // const [posts, setPosts] = useState([]);
@@ -86,6 +87,7 @@ function App() {
       <Routes>
         <Route path="/" element={<h1>Hey this is the home page</h1>} />
         <Route path="/register" element={<RegisterForm />} />
+        <Route path="/login" element={<LoginForm />} />
       </Routes>
     </Router>
   );
