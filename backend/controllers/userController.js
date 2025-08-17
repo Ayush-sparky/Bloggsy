@@ -13,7 +13,6 @@ const registerUser = async (req, res, next) => {
 
   try {
     const emailExist = await userModel.findOne({ email });
-
     if (emailExist) {
       const error = new Error("Email already in use");
       error.statusCode = 400;
@@ -21,15 +20,25 @@ const registerUser = async (req, res, next) => {
     }
 
     const hashedPassword = await bcrypt.hash(password, 10);
+
     const newUser = await userModel.create({
       username,
       email,
       password: hashedPassword,
     });
 
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
     res.status(201).json({
       message: "New user registered successfully",
-      newUser,
+      token,
+      user: {
+        id: newUser._id,
+        username: newUser.username,
+        email: newUser.email,
+      },
     });
   } catch (err) {
     next(err);
@@ -47,25 +56,30 @@ const loginUser = async (req, res, next) => {
 
   try {
     const user = await userModel.findOne({ email });
-
     if (!user) {
       const error = new Error("Invalid email or password");
       error.statusCode = 400;
       return next(error);
     }
 
-    const isMatch = bcrypt.compare(password, user.password);
-
+    const isMatch = await bcrypt.compare(password, user.password);
     if (!isMatch) {
       const error = new Error("Invalid email or password");
       error.statusCode = 400;
       return next(error);
     }
 
-    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET,{expiresIn: '1h'});
+    const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+      expiresIn: "1h",
+    });
+
     res.status(200).json({
-      message: "Logged in successfully",
       token,
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     });
   } catch (err) {
     next(err);
