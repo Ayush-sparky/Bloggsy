@@ -24,24 +24,32 @@ export default AuthProvider = ({ children }) => {
     checkUser();
   }, []);
 
-   const login = async (userData) => {
-     try {
-       const user = await authServices.loginUser(userData);
-       dispatch({ type: "LOGIN_SUCCESS", payload: user });
-     } catch (err) {
-       dispatch({ type: "LOGIN_FAILURE", payload: err });
-     }
-   };
+  const login = async (userData) => {
+    try {
+      const user = await authServices.loginUser(userData);
+      dispatch({ type: "LOGIN_SUCCESS", payload: user });
+    } catch (err) {
+      dispatch({ type: "LOGIN_FAILURE", payload: err });
+    }
+  };
 
-   const register = async (userData) => {
-     await authServices.registerUser(userData);
-   };
+  const register = async (userData) => {
+    try {
+      await authServices.register(userData);
+      return true;
+    } catch (err) {
+      return false;
+    }
+  };
 
-   const logout = async () => {
-     await authServices.logout();
-   };
+  const logout = async () => {
+    authServices.logout();
+    dispatch({ type: "LOGOUT" });
+  };
 
-   return <AuthContext.Provider value={{...state, login, register, logout}}>
-    {children}
-   </AuthContext.Provider>
+  return (
+    <AuthContext.Provider value={{ ...state, login, register, logout }}>
+      {children}
+    </AuthContext.Provider>
+  );
 };

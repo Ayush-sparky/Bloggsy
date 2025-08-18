@@ -42,6 +42,18 @@ const authServices = {
   logout: () => {
     removeToken();
   },
+
+  getCurrentUser: () => {
+    const token = localStorage.getItem("blog_token");
+    if (!token) return null;
+
+    try {
+      const decoded = JSON.parse(atob(token.split(".")[1])); // decode payload
+      return decoded; // contains id, email, etc.
+    } catch {
+      return null;
+    }
+  },
 };
 
 export default authServices;
