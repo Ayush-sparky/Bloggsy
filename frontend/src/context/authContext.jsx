@@ -7,22 +7,23 @@ const AuthContext = createContext();
 const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
-  // useEffect(() => {
-  //   const checkUser = async () => {
-  //     try {
-  //       const user = authServices.getCurrentUser();
+  useEffect(() => {
+    const checkUser = async () => {
+      try {
+        const user = await authServices.getCurrentUser();
+        console.log(user);
 
-  //       if (user) {
-  //         dispatch({ type: "LOGIN_SUCCESS", payload: user });
-  //       } else {
-  //         dispatch({ type: "LOGIN_FAILURE", payload: null });
-  //       }
-  //     } catch (err) {
-  //       dispatch({ type: "LOGIN_FAILURE", payload: err.message });
-  //     }
-  //   };
-  //   checkUser();
-  // }, []);
+        if (user && user.id) {
+          dispatch({ type: "LOGIN_SUCCESS", payload: user });
+        } else {
+          dispatch({ type: "LOGIN_FAILURE", payload: null });
+        }
+      } catch (err) {
+        dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+      }
+    };
+    checkUser();
+  }, []);
 
   const login = async (userData) => {
     try {

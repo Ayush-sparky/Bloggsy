@@ -60,15 +60,18 @@ const authServices = {
     removeToken();
   },
 
-  getCurrentUser: () => {
-    const token = getToken();
-    if (!token) return null;
-
+  getCurrentUser: async () => {
     try {
-      const decoded = JSON.parse(atob(token.split(".")[1])); // decode payload
-      return decoded; // contains id, email, etc.
-    } catch {
-      return null;
+      const res = await api.get("/api/users/current_user");
+      return res.data.user;
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.error ||
+          "Something went wrong, please try again.",
+        status: error.response?.status || 500,
+      };
     }
   },
 };
