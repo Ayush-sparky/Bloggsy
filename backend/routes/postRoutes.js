@@ -15,7 +15,7 @@ router.post("/create", authMiddleware, upload.single("cover"), createPost);
 // Get all posts (pagination supported)
 router.get("/", getAllPosts);
 
-// Edit post (only author have the authority)
+// Edit post (only author has the authority)
 router.put("/update/:id", authMiddleware, upload.single("cover"), updatePost);
 
 // Delete post (authorized only)

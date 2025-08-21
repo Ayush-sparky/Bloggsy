@@ -1,5 +1,6 @@
 import PostCard from "./mainFeed/PostCard";
 import CreatePost from "./mainFeed/CreatePost";
+import postServices from "../../services/postServices";
 
 export function MainFeed() {
   const posts = [
@@ -80,8 +81,14 @@ export function MainFeed() {
     },
   ];
 
+  const fetchAllPosts = async () => {
+    const posts = await postServices.getAllPosts();
+    console.log(posts);
+  };
+
   return (
     <div className="space-y-6">
+      <button onClick={fetchAllPosts}>Fetch All Posts</button>
       <CreatePost />
 
       {posts.map((post) => (
