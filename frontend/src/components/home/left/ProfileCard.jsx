@@ -11,11 +11,11 @@ export default function ProfileCard() {
               {user.username.charAt(0).toUpperCase()}
             </h2>
           ) : (
-            <p>{"Not Found"}</p>
+            <p>{"?"}</p>
           )}
         </div>
         <h3 className="font-serif font-bold text-slate-800 mb-1">
-          {user ? user.username : "Not Found"}
+          @ {user ? user.username : "Not Found"}
         </h3>
         <p className="text-sm text-slate-600 mb-4">
           Creative Writer & Tech Enthusiast
