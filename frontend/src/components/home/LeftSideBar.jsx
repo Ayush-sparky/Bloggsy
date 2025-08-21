@@ -9,22 +9,23 @@ export function LeftSidebar() {
     { name: "Lifestyle", count: 423, icon: Users },
   ];
 
-  const {user} = useAuth();
-  console.log(user)
+  const { user } = useAuth();
 
   return (
     <div className="sticky top-20 space-y-6">
       {/* Profile Card */}
       <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
         <div className="text-center">
-          <div className="w-16 h-16 mx-auto mb-4 rounded-full overflow-hidden">
-            <img
-              src="/professional-blogger-avatar.png"
-              alt="Jane Doe"
-              className="w-full h-full object-cover"
-            />
+          <div className="w-16 h-16 mx-auto flex justify-center items-center bg-blue-800 mb-4 rounded-full">
+            {user ? (
+              <h2 className=" text-2xl font-bold text-white">{user.username.charAt(0).toUpperCase()}</h2>
+            ) : (
+              <p>{"Not Found"}</p>
+            )}
           </div>
-          <h3 className="font-serif font-bold text-slate-800 mb-1">{user ? user.name : "Not Found"}</h3>
+          <h3 className="font-serif font-bold text-slate-800 mb-1">
+            {user ? user.username : "Not Found"}
+          </h3>
           <p className="text-sm text-slate-600 mb-4">
             Creative Writer & Tech Enthusiast
           </p>

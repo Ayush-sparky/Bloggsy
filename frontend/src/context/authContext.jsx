@@ -11,7 +11,7 @@ const AuthProvider = ({ children }) => {
     const checkUser = async () => {
       try {
         const user = await authServices.getCurrentUser();
-        console.log(user);
+        // console.log(user);
 
         if (user && user.id) {
           dispatch({ type: "LOGIN_SUCCESS", payload: user });
@@ -38,6 +38,9 @@ const AuthProvider = ({ children }) => {
   const register = async (userData) => {
     try {
       const res = await authServices.registerUser(userData);
+      // console.log(res)
+      dispatch({ type: "LOGIN_SUCCESS", payload: res.data.user });
+
       return res;
     } catch (err) {
       return err;
