@@ -1,8 +1,7 @@
 import { useAuth } from "../../../context/authContext";
 
-const { user } = useAuth();
-
 export default function ProfileCard() {
+  const { user } = useAuth();
   return (
     <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="text-center">
