@@ -1,33 +1,34 @@
-import { createContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 import { authReducer, initialAuthState } from "../reducers/authReducer";
 import authServices from "../services/authServices";
 
 const AuthContext = createContext();
 
-export default AuthProvider = ({ children }) => {
+const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialAuthState);
 
-  useEffect(() => {
-    const checkUser = async () => {
-      try {
-        const user = authServices.getCurrentUser();
+  // useEffect(() => {
+  //   const checkUser = async () => {
+  //     try {
+  //       const user = authServices.getCurrentUser();
 
-        if (user) {
-          dispatch({ type: "LOGIN_SUCCESS", payload: user });
-        } else {
-          dispatch({ type: "LOGIN_FAILURE", payload: null });
-        }
-      } catch (err) {
-        dispatch({ type: "LOGIN_FAIL", payload: err.message });
-      }
-    };
-    checkUser();
-  }, []);
+  //       if (user) {
+  //         dispatch({ type: "LOGIN_SUCCESS", payload: user });
+  //       } else {
+  //         dispatch({ type: "LOGIN_FAILURE", payload: null });
+  //       }
+  //     } catch (err) {
+  //       dispatch({ type: "LOGIN_FAILURE", payload: err.message });
+  //     }
+  //   };
+  //   checkUser();
+  // }, []);
 
   const login = async (userData) => {
     try {
-      const user = await authServices.loginUser(userData);
-      dispatch({ type: "LOGIN_SUCCESS", payload: user });
+      const response = await authServices.loginUser(userData);
+      dispatch({ type: "LOGIN_SUCCESS", payload: response.user });
+      return response;
     } catch (err) {
       dispatch({ type: "LOGIN_FAILURE", payload: err });
     }
@@ -35,14 +36,14 @@ export default AuthProvider = ({ children }) => {
 
   const register = async (userData) => {
     try {
-      await authServices.register(userData);
-      return true;
+      const res = await authServices.registerUser(userData);
+      return res;
     } catch (err) {
-      return false;
+      return err;
     }
   };
 
-  const logout = async () => {
+  const logout = () => {
     authServices.logout();
     dispatch({ type: "LOGOUT" });
   };
@@ -52,4 +53,14 @@ export default AuthProvider = ({ children }) => {
       {children}
     </AuthContext.Provider>
   );
+};
+
+export default AuthProvider;
+
+export const useAuth = () => {
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error("useAuth must be used within an AuthProvider");
+  }
+  return context;
 };

@@ -1,11 +1,21 @@
 import { useState } from "react";
-import authServices from "../../services/authServices";
+import { Link, useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
+import { useToast } from "../../context/ToastContext";
+
+const initialAuthState = {
+  email: "",
+  password: "",
+};
 
 export default function LoginForm() {
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState(initialAuthState);
+  const [isLoading, setIsLoading] = useState(false);
+
+  const navigate = useNavigate()
+
+  const { login } = useAuth();
+  const { showSuccess, showError } = useToast();
 
   const handleChange = (e) => {
     setFormData({
@@ -15,9 +25,25 @@ export default function LoginForm() {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault();
-    console.log("Login data:", formData);
-    await authServices.loginUser(formData);
+    try {
+      e.preventDefault();
+      setIsLoading(true);
+      const res = await login(formData);
+
+      if (!res.success) {
+        setFormData(initialAuthState);
+        showError(res.message);
+        setIsLoading(false);
+        return;
+      }
+      
+      showSuccess("Login Successful!!!");
+      navigate('/')
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -34,7 +60,6 @@ export default function LoginForm() {
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-6">
-
             <div>
               <label
                 htmlFor="email"
@@ -46,6 +71,7 @@ export default function LoginForm() {
                 type="email"
                 id="email"
                 name="email"
+                disabled={isLoading}
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -65,6 +91,7 @@ export default function LoginForm() {
                 type="password"
                 id="password"
                 name="password"
+                disabled={isLoading}
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -75,21 +102,22 @@ export default function LoginForm() {
 
             <button
               type="submit"
+              disabled={isLoading}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
             >
-              Login
+              {isLoading ? "Logging in....." : "Login"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{" "}
-              <a
-                href="/register"
+              <Link
+                to="/register"
                 className="text-blue-600 hover:text-blue-500 font-medium"
               >
                 Sign up
-              </a>
+              </Link>
             </p>
           </div>
         </div>

@@ -7,7 +7,7 @@ const setToken = (token) => {
 };
 
 const getToken = () => {
-  localStorage.getItem(TOKEN_KEY);
+  return localStorage.getItem(TOKEN_KEY);
 };
 
 const removeToken = () => {
@@ -18,9 +18,20 @@ const authServices = {
   registerUser: async (userData) => {
     try {
       const response = await api.post("/api/users/register", userData);
-      return response.data;
-    } catch (err) {
-      return err;
+
+      setToken(response.data.token);
+      return {
+        success: true,
+        data: response.data,
+      };
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.error ||
+          "Something went wrong, please try again.",
+        status: error.response?.status || 500,
+      };
     }
   },
 
@@ -28,14 +39,20 @@ const authServices = {
     try {
       const response = await api.post("/api/users/login", userData);
       const { token, user } = response.data;
-
       setToken(token);
       return {
-        message: response.data.message,
+        success: true,
         user,
+        token,
       };
-    } catch (err) {
-      return err;
+    } catch (error) {
+      return {
+        success: false,
+        message:
+          error.response?.data?.error ||
+          "Something went wrong, please try again.",
+        status: error.response?.status || 500,
+      };
     }
   },
 
@@ -44,7 +61,7 @@ const authServices = {
   },
 
   getCurrentUser: () => {
-    const token = localStorage.getItem("blog_token");
+    const token = getToken();
     if (!token) return null;
 
     try {

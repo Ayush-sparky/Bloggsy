@@ -1,14 +1,21 @@
 import { useState } from "react";
-import authServices from "../../services/authServices";
+import { useNavigate, Link } from "react-router-dom";
+import { useAuth } from "../../context/authContext";
+import { useToast } from "../../context/ToastContext";
+
+const initialState = {
+  username: "",
+  email: "",
+  password: "",
+};
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState({
-    username: "",
-    email: "",
-    password: "",
-  });
+  const [formData, setFormData] = useState(initialState);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const [isLoading, setIsLoading] = useState(false)
+  const { showSuccess, showError } = useToast();
+  const { register } = useAuth();
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     setFormData({
@@ -19,13 +26,19 @@ export default function RegisterForm() {
 
   const handleSubmit = async (e) => {
     try {
-      setIsLoading(true)
       e.preventDefault();
-      await authServices.registerUser(formData);
-      setIsLoading(false)
-    } catch (error) {
-      setIsLoading(false)
-      return error
+      setIsLoading(true);
+      const response = await register(formData);
+      if (!response.success) {
+        setFormData(initialState);
+        showError(response.message);
+        setIsLoading(false);
+        return;
+      }
+      showSuccess("Registration Successful!!!");
+      navigate("/");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -54,6 +67,7 @@ export default function RegisterForm() {
                 type="text"
                 id="username"
                 name="username"
+                disabled={isLoading}
                 value={formData.username}
                 onChange={handleChange}
                 required
@@ -73,6 +87,7 @@ export default function RegisterForm() {
                 type="email"
                 id="email"
                 name="email"
+                disabled={isLoading}
                 value={formData.email}
                 onChange={handleChange}
                 required
@@ -92,6 +107,7 @@ export default function RegisterForm() {
                 type="password"
                 id="password"
                 name="password"
+                disabled={isLoading}
                 value={formData.password}
                 onChange={handleChange}
                 required
@@ -105,19 +121,19 @@ export default function RegisterForm() {
               disabled={isLoading}
               className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
             >
-              {isLoading ? 'Registering...' : 'Register'}
+              {isLoading ? "Registering..." : "Register"}
             </button>
           </form>
 
           <div className="mt-6 text-center">
             <p className="text-sm text-slate-600 dark:text-slate-400">
               Already have an account?{" "}
-              <a
-                href="/login"
+              <Link
+                to="/login"
                 className="text-blue-600 hover:text-blue-500 font-medium"
               >
-                Sign in
-              </a>
+                Sign
+              </Link>
             </p>
           </div>
         </div>
