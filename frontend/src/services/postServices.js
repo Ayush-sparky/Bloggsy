@@ -1,14 +1,14 @@
 import { api } from "./api";
 
 const postServices = {
-    getAllPosts : async () => {
-       try {
-         const response = await api.get("/api/posts");
-         return response.data;
-       } catch (err) {
-        throw new Error(err)
-       }
+  getAllPosts: async (page,limit) => {
+    try {
+      const response = await api.get(`/api/posts?page=${page}&limit=${limit}`);
+      return response.data;
+    } catch (err) {
+      throw new Error(err);
     }
-}
+  },
+};
 
-export default postServices
+export default postServices;

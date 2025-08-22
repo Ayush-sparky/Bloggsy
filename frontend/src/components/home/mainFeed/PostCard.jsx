@@ -13,18 +13,20 @@ export default function PostCard({ post }) {
       <div className="p-6 pb-4">
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 rounded-full overflow-hidden">
-              <img
-                src={post.avatar || "/placeholder.svg"}
-                alt={post.author}
-                className="w-full h-full object-cover"
-              />
+            <div className="w-10 h-10 bg-blue-800 flex justify-center items-center rounded-full overflow-hidden">
+              {post.author ? (
+                <h2 className=" text-lg font-medium text-white">
+                  {post.author.username.charAt(0).toUpperCase()}
+                </h2>
+              ) : (
+                <p>{"?"}</p>
+              )}
             </div>
             <div>
-              <h4 className="font-semibold text-slate-800">{post.author}</h4>
-              <p className="text-sm text-slate-500">
-                {post.username} • {post.time}
-              </p>
+              <h4 className="font-semibold text-slate-800">
+                {post.author.username}
+              </h4>
+              <p className="text-sm text-slate-500">{post.username} • 2hr</p>
             </div>
           </div>
           <button className="p-2 hover:bg-slate-100 rounded-md transition-colors">
@@ -35,25 +37,13 @@ export default function PostCard({ post }) {
         <h2 className="font-serif font-bold text-xl text-slate-800 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
           {post.title}
         </h2>
-        <p className="text-slate-600 mb-4 leading-relaxed">{post.excerpt}</p>
-
-        <div className="flex flex-wrap gap-2 mb-4">
-          {post.tags.map((tag) => (
-            /* Replaced shadcn Badge with plain span */
-            <span
-              key={tag}
-              className="bg-slate-100 text-slate-600 text-xs px-2 py-1 rounded-full hover:bg-blue-100 cursor-pointer transition-colors"
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
+        <p className="text-slate-600 mb-4 leading-relaxed">{post.content}</p>
       </div>
 
       {/* Post Image */}
       <div className="px-6 pb-4">
         <img
-          src={post.image || "/placeholder.svg"}
+          src={`http://localhost:3030${post.coverImage}` || "/placeholder.svg"}
           alt={post.title}
           className="w-full h-48 object-cover rounded-lg"
         />
@@ -65,15 +55,15 @@ export default function PostCard({ post }) {
           <div className="flex items-center space-x-6">
             <button className="flex items-center space-x-2 text-slate-600 hover:text-red-500 p-2 rounded-md transition-colors">
               <Heart className="w-4 h-4" />
-              <span className="text-sm">{post.likes}</span>
+              <span className="text-sm">123</span>
             </button>
             <button className="flex items-center space-x-2 text-slate-600 hover:text-blue-500 p-2 rounded-md transition-colors">
               <MessageCircle className="w-4 h-4" />
-              <span className="text-sm">{post.comments}</span>
+              <span className="text-sm">12</span>
             </button>
             <button className="flex items-center space-x-2 text-slate-600 hover:text-green-500 p-2 rounded-md transition-colors">
               <Share2 className="w-4 h-4" />
-              <span className="text-sm">{post.shares}</span>
+              <span className="text-sm">6</span>
             </button>
           </div>
           <button className="text-slate-600 hover:text-blue-600 p-2 rounded-md transition-colors">
