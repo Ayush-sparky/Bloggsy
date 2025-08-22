@@ -1,4 +1,6 @@
 import { Search, Bell, MessageCircle, User } from "lucide-react";
+import CreatePostDialog from "../dialogs/CreatePostDialog";
+import { useState } from "react";
 
 export function Header() {
   return (
@@ -34,9 +36,7 @@ export function Header() {
             <button className="p-2 text-slate-600 hover:text-blue-600 hover:bg-slate-100 rounded-md transition-colors">
               <User className="w-5 h-5" />
             </button>
-            <button className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md transition-colors">
-              Write Post
-            </button>
+            <CreatePostDialog />
           </div>
         </div>
       </div>
