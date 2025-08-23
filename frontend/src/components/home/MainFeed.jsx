@@ -13,7 +13,7 @@ export function MainFeed() {
     const fetchAllPosts = async () => {
       const resPosts = await postServices.getAllPosts(currentPage, limit);
 
-      const allPosts = resPosts.allPosts;
+      const allPosts = resPosts.posts;
       // const resCurrPage = resPosts.currentPage;
       const resTotalPages = resPosts.totalPages;
 
