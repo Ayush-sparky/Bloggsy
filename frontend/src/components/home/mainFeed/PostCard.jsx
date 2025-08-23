@@ -1,3 +1,4 @@
+import { useTimeAgo } from "@/hooks/useTimeAgo";
 import {
   Heart,
   MessageCircle,
@@ -7,6 +8,9 @@ import {
 } from "lucide-react";
 
 export default function PostCard({ post }) {
+  const PostTime = post.createdAt || "2025-08-22T03:29:35.746Z";
+  const timeAgo = useTimeAgo(PostTime);
+
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
       {/* Post Header */}
@@ -26,7 +30,9 @@ export default function PostCard({ post }) {
               <h4 className="font-semibold text-slate-800">
                 {post.author.username}
               </h4>
-              <p className="text-sm text-slate-500">{post.username} • 2hr</p>
+              <p className="text-sm text-slate-500">
+                {post.username} • {timeAgo || "1 day"}
+              </p>
             </div>
           </div>
           <button className="p-2 hover:bg-slate-100 rounded-md transition-colors">

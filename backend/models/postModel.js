@@ -18,7 +18,7 @@ const postSchema = new mongoose.Schema({
   coverImage: {
     type: String,
   },
-});
+},{timestamps: true});
 
 // Creating a model based on the postSchema
 const postModel = mongoose.model("posts", postSchema);
