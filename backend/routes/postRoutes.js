@@ -1,9 +1,9 @@
 const express = require("express");
 const {
   createPost,
-  getAllPosts,
   updatePost,
   deletePost,
+  getOthersPosts,
 } = require("../controllers/postController");
 const router = express.Router();
 const upload = require("../multerConfig");
@@ -12,8 +12,8 @@ const authMiddleware = require("../middlewares/authMiddleware");
 // Create post
 router.post("/create", authMiddleware, upload.single("cover"), createPost);
 
-// Get all posts (pagination supported)
-router.get("/", getAllPosts);
+// Get all posts except self (pagination supported)
+router.get("/", authMiddleware, getOthersPosts);
 
 // Edit post (only author has the authority)
 router.put("/update/:id", authMiddleware, upload.single("cover"), updatePost);

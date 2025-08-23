@@ -26,30 +26,41 @@ const createPost = async (req, res, next) => {
   }
 };
 
-const getAllPosts = async (req, res, next) => {
+const getOthersPosts = async (req, res, next) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const skip = (page - 1) * limit; // Calc how many posts to skip (depends on the page no. and limit set)
+  const skip = (page - 1) * limit;
 
   try {
-    const totalPosts = await postModel.countDocuments();
+    // 1. Identify the logged-in user
+    const loggedInUserId = req.user.id;
+    // (assuming your auth middleware attaches user object from JWT)
+
+    // 2. Count only posts that are NOT by the logged-in user
+    const totalPosts = await postModel.countDocuments({
+      author: { $ne: loggedInUserId },
+    });
+
+    // 3. Query posts excluding self, with pagination + sorting
     const allPosts = await postModel
-      .find()
-      .populate("author", "username -_id")
+      .find({ author: { $ne: loggedInUserId } }) // exclude self posts
+      .populate("author", "username -_id") // only send username (not _id)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
 
+    // 4. Respond with structured meta info
     res.status(200).json({
       Total_Posts: totalPosts,
       totalPages: Math.ceil(totalPosts / limit),
       currentPage: page,
-      allPosts,
+      posts: allPosts, // renamed for clarity
     });
   } catch (err) {
     next(err);
   }
 };
+
 
 const updatePost = async (req, res, next) => {
   const { id } = req.params;
@@ -127,7 +138,7 @@ const deletePost = async (req, res, next) => {
 
 module.exports = {
   createPost,
-  getAllPosts,
+  getOthersPosts,
   updatePost,
   deletePost,
 };
