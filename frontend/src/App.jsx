@@ -5,6 +5,7 @@ import AuthProvider from "./context/authContext";
 import HomePage from "./pages/HomePage";
 import ProtectedRoute from "./context/ProtectedRoute";
 import { ToastProvider } from "./context/ToastContext";
+import ProfilePage from "./components/user/ProfilePage";
 
 function App() {
   return (
@@ -20,6 +21,7 @@ function App() {
                 </ProtectedRoute>
               }
             />
+            <Route path="/profile" element={<ProfilePage />} />
             <Route path="/register" element={<RegisterForm />} />
             <Route path="/login" element={<LoginForm />} />
           </Routes>
