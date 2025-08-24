@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useAuth } from "../../../context/authContext";
 
 export default function ProfileCard() {
@@ -34,9 +35,12 @@ export default function ProfileCard() {
             <p>Following</p>
           </div>
         </div>
-        <button className="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md transition-colors">
-          Edit Profile
-        </button>
+        <Link
+          to="/profile"
+          className="w-full bg-sky-500 hover:bg-sky-600 text-white px-4 py-2 rounded-md transition-colors"
+        >
+          View Profile
+        </Link>
       </div>
     </div>
   );

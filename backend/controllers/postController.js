@@ -32,16 +32,12 @@ const getOthersPosts = async (req, res, next) => {
   const skip = (page - 1) * limit;
 
   try {
-    // 1. Identify the logged-in user
     const loggedInUserId = req.user.id;
-    // (assuming your auth middleware attaches user object from JWT)
 
-    // 2. Count only posts that are NOT by the logged-in user
     const totalPosts = await postModel.countDocuments({
       author: { $ne: loggedInUserId },
     });
 
-    // 3. Query posts excluding self, with pagination + sorting
     const allPosts = await postModel
       .find({ author: { $ne: loggedInUserId } }) // exclude self posts
       .populate("author", "username -_id") // only send username (not _id)
@@ -49,17 +45,52 @@ const getOthersPosts = async (req, res, next) => {
       .limit(limit)
       .sort({ createdAt: -1 });
 
-    // 4. Respond with structured meta info
     res.status(200).json({
       Total_Posts: totalPosts,
       totalPages: Math.ceil(totalPosts / limit),
       currentPage: page,
-      posts: allPosts, // renamed for clarity
+      posts: allPosts, 
     });
   } catch (err) {
     next(err);
   }
 };
+
+const getMyPosts = async (req, res, next) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const skip = (page - 1) * limit;
+
+  try {
+    // 1. Identify the logged-in user
+    const loggedInUserId = req.user.id;
+    // (comes from your auth middleware after JWT verification)
+
+    // 2. Count how many posts the logged-in user has
+    const totalPosts = await postModel.countDocuments({
+      author: loggedInUserId,
+    });
+
+    // 3. Query posts authored by this user, with pagination + sorting
+    const myPosts = await postModel
+      .find({ author: loggedInUserId })
+      .populate("author", "username -_id") // optional: keep username in response
+      .skip(skip)
+      .limit(limit)
+      .sort({ createdAt: -1 });
+
+    // 4. Send structured response
+    res.status(200).json({
+      Total_Posts: totalPosts,
+      totalPages: Math.ceil(totalPosts / limit),
+      currentPage: page,
+      posts: myPosts,
+    });
+  } catch (err) {
+    next(err);
+  }
+};
+
 
 
 const updatePost = async (req, res, next) => {
@@ -141,4 +172,5 @@ module.exports = {
   getOthersPosts,
   updatePost,
   deletePost,
+  getMyPosts
 };
