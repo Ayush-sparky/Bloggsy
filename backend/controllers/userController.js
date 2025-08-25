@@ -83,6 +83,8 @@ const loginUser = async (req, res, next) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        bio: user.bio,
+        profile_image: user.profile_image,
       },
     });
   } catch (err) {
@@ -103,6 +105,8 @@ const getCurrentUser = async (req, res, next) => {
         id: user._id,
         username: user.username,
         email: user.email,
+        bio: user.bio,
+        profile_image: user.profile_image,
       },
     });
   } catch (error) {
