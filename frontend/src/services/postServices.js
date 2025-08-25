@@ -40,6 +40,15 @@ const postServices = {
       throw new Error(error.response?.data?.message || error.message);
     }
   },
+
+  deletePost: async (postId) => {
+    try {
+      const response = await api.delete(`/api/posts/delete/${postId}`);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  },
 };
 
 export default postServices;

@@ -15,8 +15,9 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { MoreHorizontalIcon } from "lucide-react";
 import UpdatePostDialog from "../dialogs/UpdatePostDialog";
+import { DeletePostDialog } from "../dialogs/DeletePostDialog";
 
-export function PostUpDel({postId}) {
+export function PostUpDel({ postId }) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,11 +29,11 @@ export function PostUpDel({postId}) {
         <DropdownMenuLabel>Post Actions</DropdownMenuLabel>
         <DropdownMenuGroup>
           <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
-            <UpdatePostDialog postId={postId}/>
+            <UpdatePostDialog postId={postId} />
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
-          <DropdownMenuItem>
-            Delete
+          <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+            <DeletePostDialog postId={postId} />
             <DropdownMenuShortcut>⌘B</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
