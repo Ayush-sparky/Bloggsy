@@ -1,3 +1,4 @@
+import { PostUpDel } from "@/components/dropdowns/PostUpDel";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
 import {
   Heart,
@@ -7,7 +8,7 @@ import {
   MoreHorizontal,
 } from "lucide-react";
 
-export default function PostCard({ post }) {
+export default function PostCard({ post, ownPost = false }) {
   const PostTime = post.createdAt || "2025-08-22T03:29:35.746Z";
   const timeAgo = useTimeAgo(PostTime);
 
@@ -35,9 +36,9 @@ export default function PostCard({ post }) {
               </p>
             </div>
           </div>
-          <button className="p-2 hover:bg-slate-100 rounded-md transition-colors">
-            <MoreHorizontal className="w-4 h-4" />
-          </button>
+          {ownPost && (
+            <PostUpDel postId={post._id} />
+          )}
         </div>
 
         <h2 className="font-serif font-bold text-xl text-slate-800 mb-2 hover:text-blue-600 cursor-pointer transition-colors">

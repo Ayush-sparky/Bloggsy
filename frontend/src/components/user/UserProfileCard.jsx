@@ -24,7 +24,7 @@ export default function UserProfileCard() {
         <div className="flex flex-col items-center sm:flex-row sm:items-start sm:space-x-6 -mt-8 sm:-mt-12">
           {/* Profile Picture */}
           <div className="relative mb-4 sm:mb-0">
-            <div className="w-24 h-24 sm:w-32 sm:h-32 rounded-full border-4 border-white shadow-lg">
+            <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center bg-blue-800 rounded-full border-4 border-white shadow-lg">
               {user ? (
                 <h2 className=" text-2xl font-bold text-white">
                   {user.username.charAt(0).toUpperCase()}

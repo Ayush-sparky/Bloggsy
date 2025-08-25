@@ -120,7 +120,7 @@ const updatePost = async (req, res, next) => {
 
     if (title) post.title = title;
     if (content) post.content = content;
-    if (req.file) post.coverImage = req.file.filename;
+    if (req.file) post.coverImage = `/uploads/${req.file.filename}`;
 
     const updatedPost = await post.save();
 

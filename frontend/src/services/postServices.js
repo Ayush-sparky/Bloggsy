@@ -31,6 +31,15 @@ const postServices = {
       throw new Error(error.response?.data?.message || error.message);
     }
   },
+
+  updateAPost: async (postId, formData) => {
+    try {
+      const response = await api.put(`/api/posts/update/${postId}`, formData);
+      return response.data;
+    } catch (error) {
+      throw new Error(error.response?.data?.message || error.message);
+    }
+  },
 };
 
 export default postServices;
