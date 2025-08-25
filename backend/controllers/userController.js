@@ -3,7 +3,7 @@ const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
 const registerUser = async (req, res, next) => {
-  const { username, email, password } = req.body;
+  const { username, email, password, bio } = req.body;
 
   if (!username || !email || !password) {
     const error = new Error("All fields are required");
@@ -25,6 +25,8 @@ const registerUser = async (req, res, next) => {
       username,
       email,
       password: hashedPassword,
+      bio: bio || null,
+      profile_image: req.file ? `/uploads/${req.file.filename}` : null,
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
@@ -38,6 +40,8 @@ const registerUser = async (req, res, next) => {
         id: newUser._id,
         username: newUser.username,
         email: newUser.email,
+        bio: newUser.bio,
+        profile_image: newUser.profile_image,
       },
     });
   } catch (err) {

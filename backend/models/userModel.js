@@ -16,8 +16,14 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  bio: {
+    type: String,
+  },
+  profile_image: {
+    type: String,
+  },
 });
 
 // Creating a model based on the userSchema
-const userModel = mongoose.model("users",userSchema)
-module.exports = userModel
+const userModel = mongoose.model("users", userSchema);
+module.exports = userModel;

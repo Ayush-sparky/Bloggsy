@@ -6,9 +6,10 @@ const {
   getCurrentUser,
 } = require("../controllers/userController");
 const authMiddleware = require("../middlewares/authMiddleware");
+const upload = require("../multerConfig");
 
 // Register new Users
-router.post("/register", registerUser);
+router.post("/register",upload.single("profile"), registerUser);
 
 // Login in users
 router.post("/login", loginUser);

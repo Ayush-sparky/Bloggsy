@@ -3,7 +3,7 @@ const path = require("path");
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-    cb(null, "uploads/"); // save in uploads folder
+    cb(null, "uploads/");
   },
 
   filename: function (req, file, cb) {
@@ -12,11 +12,10 @@ const storage = multer.diskStorage({
   },
 });
 
-// File filter (optional — to allow only images)
 const fileFilter = (req, file, cb) => {
   const allowedTypes = ["image/jpeg", "image/jpg", "image/png"];
   if (allowedTypes.includes(file.mimetype)) {
-    cb(null, true); // accept
+    cb(null, true);
   } else {
     cb(new Error("Only .jpeg, .jpg, .png formats are allowed"), false);
   }
