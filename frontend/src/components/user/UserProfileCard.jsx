@@ -3,10 +3,12 @@ import { useAuth } from "../../context/authContext";
 export default function UserProfileCard() {
   const { user, loading } = useAuth();
 
-  if(loading){
-    return <div className=" min-h-screen flex justify-center items-center">
-            <h1 className=" text-2xl font-bold">Loading...</h1>
-    </div>
+  if (loading) {
+    return (
+      <div className=" min-h-screen flex justify-center items-center">
+        <h1 className=" text-2xl font-bold">Loading...</h1>
+      </div>
+    );
   }
 
   return (
@@ -25,12 +27,12 @@ export default function UserProfileCard() {
           {/* Profile Picture */}
           <div className="relative mb-4 sm:mb-0">
             <div className="w-24 h-24 sm:w-32 sm:h-32 flex justify-center items-center bg-blue-800 rounded-full border-4 border-white shadow-lg">
-              {user ? (
+              {user.profile_image ? (
+                <img className=" w-full h-full rounded-full" src={`http://localhost:3030${user.profile_image}`} />
+              ) : (
                 <h2 className=" text-2xl font-bold text-white">
                   {user.username.charAt(0).toUpperCase()}
                 </h2>
-              ) : (
-                <p>{"?"}</p>
               )}
             </div>
           </div>
@@ -45,8 +47,8 @@ export default function UserProfileCard() {
                 {user ? user.email : "notFound@notFound.com"}
               </p>
               <p className="text-slate-700 mt-3 max-w-2xl mx-auto sm:mx-0">
-                Passionate blogger sharing insights about technology, lifestyle,
-                and personal growth. Always learning, always writing.
+                {user.bio ||
+                  "Passionate blogger sharing insights on technology and personal growth."}
               </p>
             </div>
 
