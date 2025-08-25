@@ -40,7 +40,7 @@ const getOthersPosts = async (req, res, next) => {
 
     const allPosts = await postModel
       .find({ author: { $ne: loggedInUserId } }) // exclude self posts
-      .populate("author", "username -_id") // only send username (not _id)
+      .populate("author", "username profile_image -_id") // only send username (not _id)
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
@@ -74,7 +74,7 @@ const getMyPosts = async (req, res, next) => {
     // 3. Query posts authored by this user, with pagination + sorting
     const myPosts = await postModel
       .find({ author: loggedInUserId })
-      .populate("author", "username -_id") // optional: keep username in response
+      .populate("author", "username profile_image -_id") // optional: keep username in response
       .skip(skip)
       .limit(limit)
       .sort({ createdAt: -1 });
