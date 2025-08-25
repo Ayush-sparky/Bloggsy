@@ -19,12 +19,17 @@ export default function PostCard({ post, ownPost = false }) {
         <div className="flex items-center justify-between mb-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-blue-800 flex justify-center items-center rounded-full overflow-hidden">
-              {post.author ? (
+              {post.author.profile_image ? (
+                <img
+                  className="h-full w-full rounded-full"
+                  src={`http://localhost:3030${post.author.profile_image}`}
+                />
+              ) : post.author.username ? (
                 <h2 className=" text-lg font-medium text-white">
                   {post.author.username.charAt(0).toUpperCase()}
                 </h2>
               ) : (
-                <p>{"?"}</p>
+                <h2 className=" text-lg font-medium text-white">?</h2>
               )}
             </div>
             <div>
@@ -36,9 +41,7 @@ export default function PostCard({ post, ownPost = false }) {
               </p>
             </div>
           </div>
-          {ownPost && (
-            <PostUpDel postId={post._id} />
-          )}
+          {ownPost && <PostUpDel postId={post._id} />}
         </div>
 
         <h2 className="font-serif font-bold text-xl text-slate-800 mb-2 hover:text-blue-600 cursor-pointer transition-colors">
