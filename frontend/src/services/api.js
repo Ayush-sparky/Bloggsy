@@ -11,13 +11,11 @@ export const api = axios.create({
 
 api.interceptors.request.use(
   (config) => {
-    // 🔹 Attach token if available
     const token = localStorage.getItem("blog_token");
     if (token) {
       config.headers["Authorization"] = `Bearer ${token}`;
     }
 
-    // 🔹 If FormData, remove Content-Type so browser sets it correctly
     if (config.data instanceof FormData) {
       delete config.headers["Content-Type"];
     }
