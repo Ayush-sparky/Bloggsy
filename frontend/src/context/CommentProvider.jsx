@@ -1,6 +1,6 @@
 import { commentReducer, initialCommentState } from "@/reducers/commentReducer";
 import { commentServices } from "@/services/commentServices";
-import { createContext, useContext, useReducer } from "react";
+import { createContext, useContext, useEffect, useReducer } from "react";
 
 const CommentContext = createContext();
 
@@ -12,6 +12,7 @@ export default function CommentProvider({ children }) {
       dispatch({ type: "POST_OR_FETCH_COMMENTS_START" });
       const response = await commentServices.postCommentOrReply(data);
       dispatch({ type: "POST_COMMENT_SUCCESS" });
+      return response
     } catch (error) {
       return error;
     }

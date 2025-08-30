@@ -13,7 +13,6 @@ export const commentServices = {
   getCommentsOfaPost: async (postId) => {
     try {
       const response = await api.get(`/api/comments/${postId}`);
-      console.log(response.data.commentsWithReplies);
       return response.data.commentsWithReplies;
     } catch (error) {
       throw new Error("Error fetching comments");

@@ -1,5 +1,5 @@
 export const initialCommentState = {
-  comments: null,
+  comments: [],
   loading: false,
   error: null,
 };

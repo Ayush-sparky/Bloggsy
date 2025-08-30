@@ -1,3 +1,4 @@
+import { CommentCard } from "@/components/comments/CommentCard";
 import { useComment } from "@/context/CommentProvider";
 import { useState } from "react";
 
@@ -11,7 +12,6 @@ export default function TryCommentPage() {
   const [data, setData] = useState(initialDataState);
   const [postId, setPostId] = useState("");
   const { comments, error, loading, postComment, getComments } = useComment();
-  // const [commentsList, setCommentsList] = useState([]);
 
   const handleChange = (e) => {
     setData({
@@ -73,7 +73,9 @@ export default function TryCommentPage() {
           {loading ? (
             <p>Loading Comments......</p>
           ) : comments ? (
-            comments.map((c) => <li key={c._id}>{c.content}</li>)
+            comments.map((comment) => (
+              <CommentCard key={comment._id} comment={comment} />
+            ))
           ) : (
             <p>{error}</p>
           )}

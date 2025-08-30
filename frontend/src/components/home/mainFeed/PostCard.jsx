@@ -1,16 +1,16 @@
+import CommentSheet from "@/components/comments/CommentSheet";
 import { PostUpDel } from "@/components/dropdowns/PostUpDel";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
 import {
   Heart,
-  MessageCircle,
   Share2,
   Bookmark,
-  MoreHorizontal,
 } from "lucide-react";
 
 export default function PostCard({ post, ownPost = false }) {
   const PostTime = post.createdAt || "2025-08-22T03:29:35.746Z";
   const timeAgo = useTimeAgo(PostTime);
+  // console.log(post._id)
 
   return (
     <div className="bg-white rounded-xl shadow-sm hover:shadow-md transition-shadow">
@@ -67,10 +67,7 @@ export default function PostCard({ post, ownPost = false }) {
               <Heart className="w-4 h-4" />
               <span className="text-sm">123</span>
             </button>
-            <button className="flex items-center space-x-2 text-slate-600 hover:text-blue-500 p-2 rounded-md transition-colors">
-              <MessageCircle className="w-4 h-4" />
-              <span className="text-sm">12</span>
-            </button>
+            <CommentSheet postId={post._id} />
             <button className="flex items-center space-x-2 text-slate-600 hover:text-green-500 p-2 rounded-md transition-colors">
               <Share2 className="w-4 h-4" />
               <span className="text-sm">6</span>
