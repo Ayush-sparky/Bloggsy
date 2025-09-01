@@ -1,6 +1,6 @@
 import { commentReducer, initialCommentState } from "@/reducers/commentReducer";
 import { commentServices } from "@/services/commentServices";
-import { createContext, useContext, useEffect, useReducer } from "react";
+import { createContext, useContext, useReducer } from "react";
 
 const CommentContext = createContext();
 
