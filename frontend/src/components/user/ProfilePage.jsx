@@ -1,4 +1,3 @@
-import { MainFeed } from "../home/MainFeed";
 import { ProfileFeed } from "./ProfileFeed";
 import UserProfileCard from "./UserProfileCard";
 
