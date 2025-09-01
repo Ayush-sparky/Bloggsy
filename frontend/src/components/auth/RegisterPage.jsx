@@ -7,10 +7,12 @@ const initialState = {
   username: "",
   email: "",
   password: "",
+  bio: "",
+  file: null,
 };
 
 export default function RegisterForm() {
-  const [formData, setFormData] = useState(initialState);
+  const [form, setForm] = useState(initialState);
   const [isLoading, setIsLoading] = useState(false);
 
   const { showSuccess, showError } = useToast();
@@ -18,25 +20,42 @@ export default function RegisterForm() {
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value,
-    });
+    if (e.target.name === "profile") {
+      setForm({
+        ...form,
+        file: e.target.files[0],
+      });
+    } else {
+      setForm({
+        ...form,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleSubmit = async (e) => {
     try {
       e.preventDefault();
       setIsLoading(true);
+
+      const formData = new FormData();
+      formData.append("username", form.username);
+      formData.append("email", form.email);
+      formData.append("password", form.password);
+      formData.append("bio", form.bio);
+      formData.append("profile", form.file);
+
       const response = await register(formData);
       if (!response.success) {
-        setFormData(initialState);
+        setForm(initialState);
         showError(response.message);
         setIsLoading(false);
         return;
       }
       showSuccess("Registration Successful!!!");
       navigate("/");
+    } catch (error) {
+      showError(error);
     } finally {
       setIsLoading(false);
     }
@@ -68,7 +87,7 @@ export default function RegisterForm() {
                 id="username"
                 name="username"
                 disabled={isLoading}
-                value={formData.username}
+                value={form.username}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -88,7 +107,7 @@ export default function RegisterForm() {
                 id="email"
                 name="email"
                 disabled={isLoading}
-                value={formData.email}
+                value={form.email}
                 onChange={handleChange}
                 required
                 className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -108,18 +127,35 @@ export default function RegisterForm() {
                 id="password"
                 name="password"
                 disabled={isLoading}
-                value={formData.password}
+                value={form.password}
                 onChange={handleChange}
                 required
-                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className="w-full px-3 py-2 border border-slate-300 dark:border-slate-600 rounded-md shadow-sm
+                 bg-white dark:bg-slate-700 text-slate-900 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                 placeholder="Enter your password"
               />
+            </div>
+
+            <div>
+              <label htmlFor="bio">Bio</label>
+              <textarea
+                className="mt-2 placeholder-slate-400 p-2 w-full h-36 outline-none border border-slate-300 focus:ring-2 focus:ring-blue-500 rounded-sm"
+                name="bio"
+                value={form.bio}
+                onChange={handleChange}
+                placeholder="Tell us about yourself..."
+              ></textarea>
+            </div>
+
+            <div>
+              <label htmlFor="profile">Profile Picture</label>
+              <input type="file" onChange={handleChange} name="profile" accept="image/*" />
             </div>
 
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
+              className="w-full cursor-pointer bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors duration-200 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-slate-800"
             >
               {isLoading ? "Registering..." : "Register"}
             </button>
