@@ -17,9 +17,16 @@ export function UserControl() {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <div className=" h-8 w-8 flex justify-center items-center rounded-full bg-blue-700">
-          <h2 className=" text-lg font-medium text-white">
-            {user.username.charAt(0).toUpperCase()}
-          </h2>
+          {user.profile_image ? (
+            <img
+              className=" w-full h-full rounded-full"
+              src={`http://localhost:3030${user.profile_image}`}
+            />
+          ) : (
+            <h2 className=" text-2xl font-bold text-white">
+              {user.username.charAt(0).toUpperCase()}
+            </h2>
+          )}
         </div>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="start">

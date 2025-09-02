@@ -7,12 +7,15 @@ export default function ProfileCard() {
     <div className="bg-white rounded-xl p-6 shadow-sm hover:shadow-md transition-shadow">
       <div className="text-center">
         <div className="w-16 h-16 mx-auto flex justify-center items-center bg-blue-800 mb-4 rounded-full">
-          {user ? (
+          {user.profile_image ? (
+            <img
+              className=" w-full h-full rounded-full"
+              src={`http://localhost:3030${user.profile_image}`}
+            />
+          ) : (
             <h2 className=" text-2xl font-bold text-white">
               {user.username.charAt(0).toUpperCase()}
             </h2>
-          ) : (
-            <p>{"?"}</p>
           )}
         </div>
         <h3 className="font-serif font-bold text-slate-800 mb-1">
