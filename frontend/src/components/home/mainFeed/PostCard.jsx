@@ -37,7 +37,7 @@ export default function PostCard({ post, ownPost = false }) {
                 {post.author.username}
               </h4>
               <p className="text-sm text-slate-500">
-                {post.username} • {timeAgo || "1 day"}
+                {post.username} {timeAgo || "1 day"}
               </p>
             </div>
           </div>
