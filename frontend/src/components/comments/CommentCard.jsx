@@ -1,10 +1,44 @@
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
-import { MessageCircle, Heart, MoreHorizontal } from "lucide-react";
+import { MessageCircle, Heart, MoreHorizontal, Send } from "lucide-react";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
+import { useEffect, useState } from "react";
+import { commentServices } from "@/services/commentServices";
+
+const initialDataState = {
+  content: "",
+  postId: null,
+  parentCommentId: null,
+};
 
 export function CommentCard({ comment, isReply = false }) {
+  const [isReplying, setIsReplying] = useState(false);
+  const [form, setForm] = useState(initialDataState);
+
+  useEffect(() => {
+    if (comment._id && comment.post) {
+      setForm((prev) => ({
+        ...prev,
+        postId: comment.post,
+        parentCommentId: comment._id,
+      }));
+    }
+  }, [comment._id, comment.post]);
+
+  const handleChange = (e) => {
+    setForm({
+      ...form,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const postComment = async () => {
+    await commentServices.postCommentOrReply(form);
+    setForm((prev) => ({ ...prev, content: "" }));
+    setIsReplying(false);
+  };
+
   const timeAgo = useTimeAgo(comment.createdAt);
 
   return (
@@ -51,14 +85,19 @@ export function CommentCard({ comment, isReply = false }) {
                 <span className="text-xs">Like</span>
               </Button>
 
-              <Button
-                variant="ghost"
-                size="sm"
-                className="h-7 px-2 text-muted-foreground hover:text-foreground"
-              >
-                <MessageCircle className="h-3 w-3 mr-1" />
-                <span className="text-xs">Reply</span>
-              </Button>
+              {!comment.parentComment && (
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => {
+                   setIsReplying(true)
+                  }}
+                  className="h-7 px-2 text-muted-foreground hover:text-foreground"
+                >
+                  <MessageCircle className="h-3 w-3 mr-1" />
+                  <span className="text-xs">Reply</span>
+                </Button>
+              )}
 
               <Button
                 variant="ghost"
@@ -68,6 +107,37 @@ export function CommentCard({ comment, isReply = false }) {
                 <MoreHorizontal className="h-3 w-3" />
               </Button>
             </div>
+
+            {isReplying && (
+              <div className="px-4 py-6">
+                <div className="relative">
+                  <input
+                    type="text"
+                    autoFocus
+                    name="content"
+                    onKeyDown={(e) => {
+                      if (e.key === "Enter") {
+                        postComment;
+                      }
+                    }}
+                    onChange={handleChange}
+                    value={form.content}
+                    placeholder="Type your message..."
+                    className="w-full px-4 py-3 pr-12 bg-background border border-input rounded-lg text-foreground placeholder:text-muted-foreground focus:outline-none focus:ring-2 focus:ring-ring focus:border-transparent transition-all duration-200 shadow-sm hover:shadow-md"
+                  />
+                  <Button
+                    type="submit"
+                    size="sm"
+                    onClick={postComment}
+                    disabled={!form.content.trim()}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 h-8 w-8 p-0 bg-primary hover:bg-primary/90 text-primary-foreground rounded-md transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                  >
+                    <Send className="h-4 w-4" />
+                    <span className="sr-only">Send message</span>
+                  </Button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
         {comment.replies && comment.replies.length > 0 && (
