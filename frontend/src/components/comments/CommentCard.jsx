@@ -5,6 +5,7 @@ import { MessageCircle, Heart, MoreHorizontal, Send } from "lucide-react";
 import { useTimeAgo } from "@/hooks/useTimeAgo";
 import { useEffect, useState } from "react";
 import { commentServices } from "@/services/commentServices";
+import { AvatarImage } from "@radix-ui/react-avatar";
 
 const initialDataState = {
   content: "",
@@ -47,6 +48,10 @@ export function CommentCard({ comment, isReply = false }) {
         <div className="flex gap-3">
           {/* Avatar */}
           <Avatar className="h-8 w-8 flex-shrink-0">
+            <AvatarImage
+              src={`http://localhost:3030${comment.author.profile_image}`}
+              alt="@shadcn"
+            />
             <AvatarFallback className="text-xs font-medium">
               {comment.author.username.charAt(0).toUpperCase()}
             </AvatarFallback>
@@ -90,7 +95,7 @@ export function CommentCard({ comment, isReply = false }) {
                   variant="ghost"
                   size="sm"
                   onClick={() => {
-                   setIsReplying(true)
+                    setIsReplying(true);
                   }}
                   className="h-7 px-2 text-muted-foreground hover:text-foreground"
                 >
