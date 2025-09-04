@@ -44,14 +44,14 @@ const getSinglePostComments = async (req, res, next) => {
   try {
     const topLevelComments = await commentModel
       .find({ post: postId, parentComment: null })
-      .populate("author", "username")
+      .populate("author", ["username", "profile_image"])
       .sort({ createdAt: -1 });
 
     const commentsWithReplies = await Promise.all(
       topLevelComments.map(async (comment) => {
         const replies = await commentModel
           .find({ parentComment: comment._id })
-          .populate("author", "username")
+          .populate("author", ["username", "profile_image"])
           .sort({ createdAt: 1 });
 
         return {
